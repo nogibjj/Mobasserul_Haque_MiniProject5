@@ -14,7 +14,7 @@ all: install format lint test
 
 generate_and_push:
 	# Create the markdown file 
-	python test.py  # Replace with the actual command to generate the markdown
+	python test_main.py  
 
 	# Add, commit, and push the generated files to GitHub
 	@if [ -n "$$(git status --porcelain)" ]; then \
