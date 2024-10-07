@@ -95,7 +95,7 @@ def test_general_query():
             "python",
             "main.py",
             "general_query",
-            "SELECT * FROM AirlineSafetyDB WHERE airline = 'Aeroflot*'",
+            "SELECT * FROM AirlineSafety WHERE airline = 'Aeroflot*'",
         ],
         capture_output=True,
         text=True,
