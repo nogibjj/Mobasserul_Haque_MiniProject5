@@ -8,8 +8,8 @@ lint:
 	ruff check *.py
 
 test:
-	python3 -m pytest -vv --nbval -cov=mylib -cov=main test*.py
-	
+	python -m pytest -vv --cov=main --cov=mylib test_*.py	
+
 all: install format lint test
 
 generate_and_push:
