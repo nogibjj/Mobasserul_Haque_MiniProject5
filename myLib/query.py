@@ -36,7 +36,6 @@ def general_query(query):
 
     # Log the query
     log_query(f"{query}")
-    write_to_output(data, col_names)  # Write results to query_output.md
 
     # Close the cursor and connection
     cursor.close()
