@@ -23,6 +23,7 @@ This project provides an ETL (Extract, Transform, Load) and querying tool for ma
 
 ## Directory Structure
 
+```
 ├── .devcontainer/
 │   ├── devcontainer.json
 │   └── Dockerfile
@@ -44,7 +45,7 @@ This project provides an ETL (Extract, Transform, Load) and querying tool for ma
 ├── README.md  
 ├── ServeTimesDB.db  requirements.txt
 └── test_main.py
-
+```
 ## CRUD operations : 
 
 ## Usage
