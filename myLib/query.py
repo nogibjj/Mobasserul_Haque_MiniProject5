@@ -66,7 +66,6 @@ def create_record(airline, avail_seat_km_per_week, incidents_85_99, fatal_accide
             {airline}, {avail_seat_km_per_week}, {incidents_85_99}, {fatal_accidents_85_99}, {fatalities_85_99}, 
             {incidents_00_14}, {fatal_accidents_00_14}, {fatalities_00_14});"""
     )
-    write_to_output(data, col_names)  # Write results to query_output.md
 
 
 def update_record(record_id, airline, avail_seat_km_per_week, incidents_85_99, fatal_accidents_85_99, 
@@ -98,7 +97,6 @@ def update_record(record_id, airline, avail_seat_km_per_week, incidents_85_99, f
             fatal_accidents_00_14={fatal_accidents_00_14}, fatalities_00_14={fatalities_00_14} 
         WHERE id={record_id};"""
     )
-    write_to_output(data, col_names)  # Write results to query_output.md
 
 
 def delete_record(record_id):
@@ -111,7 +109,6 @@ def delete_record(record_id):
 
     # Log the query
     log_query(f"DELETE FROM AirlineSafety WHERE id={record_id};")
-    write_to_output(data, col_names)  # Write results to query_output.md
 
 
 def read_data(limit=10):
