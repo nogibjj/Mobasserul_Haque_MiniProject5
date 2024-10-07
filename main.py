@@ -1,105 +1,108 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import sys
+import argparse
+from myLib.extract import extract
+from myLib.transform_load import load
+from myLib.query import (
+    update_record,
+    delete_record,
+    create_record,
+    general_query,
+    read_data,
+)
 
-file_path = "Customer Purchasing Behaviors.csv"
-output_report = "summary_report.md" 
- 
-def read_csv_file(path):
-    return pd.read_csv(path)
 
-def summary_statistics(dataframe, report_file):
-    """Display summary statistics for numerical columns in the DataFrame."""
-    summary = dataframe.describe().transpose()
-    summary['median'] = dataframe.median(numeric_only=True)
-    summary['range'] = summary['max'] - summary['min']
-    summary['variance'] = dataframe.var(numeric_only=True)
-
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write("### Summary Statistics\n")
-        file.write(summary.to_string())
-        file.write("\n\n")
-
-def plot_histograms(dataframe, columns, report_file, bins=20):
-    """Plot histograms for specified columns in the DataFrame."""
-    plt.figure(figsize=(12, 6))
-    dataframe[columns].hist(bins=bins, edgecolor='black', figsize=(14, 8))
-    plt.suptitle('Distribution of age, annual income, purchase amount, and purchase frequency')
+def handle_arguments(args):
+    """Add action based on initial calls"""
+    parser = argparse.ArgumentParser(description="ETL-Query script for AirlineSafetyDB")
+    parser.add_argument(
+        "action",
+        choices=[
+            "extract",
+            "transform_load",
+            "update_record",
+            "delete_record",
+            "create_record",
+            "general_query",
+            "read_data",
+        ],
+    )
+    args = parser.parse_args(args[:1])
+    print(args.action)
     
-    plt.savefig("Histogram_column_distributions.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write("![Histograms](Histogram_column_distributions.png)\n\n")
+    if args.action == "update_record":
+        parser.add_argument("record_id", type=int)
+        parser.add_argument("airline")
+        parser.add_argument("avail_seat_km_per_week", type=int)
+        parser.add_argument("incidents_85_99", type=int)
+        parser.add_argument("fatal_accidents_85_99", type=int)
+        parser.add_argument("fatalities_85_99", type=int)
+        parser.add_argument("incidents_00_14", type=int)
+        parser.add_argument("fatal_accidents_00_14", type=int)
+        parser.add_argument("fatalities_00_14", type=int)
 
-def plot_scatter_with_hue(dataframe, x_col, y_col, hue_col, report_file):
-    """Visualize the relationship between annual income and purchase amount across different regions."""
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=x_col, y=y_col, data=dataframe, hue=hue_col)
-    plt.title(f'{x_col} vs. {y_col}')
-    plt.xlabel(x_col)
-    plt.ylabel(y_col)
-    
-    plt.savefig("scatter_plot_hue_by_region.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write(f"![{x_col} vs {y_col} with Hue](scatter_plot_hue_by_region.png)\n\n")
+    if args.action == "create_record":
+        parser.add_argument("airline")
+        parser.add_argument("avail_seat_km_per_week", type=int)
+        parser.add_argument("incidents_85_99", type=int)
+        parser.add_argument("fatal_accidents_85_99", type=int)
+        parser.add_argument("fatalities_85_99", type=int)
+        parser.add_argument("incidents_00_14", type=int)
+        parser.add_argument("fatal_accidents_00_14", type=int)
+        parser.add_argument("fatalities_00_14", type=int)
 
-def plot_box_by_category(dataframe, x_col, y_col, report_file):
-    """Compare the distribution of loyalty scores across different regions."""
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x=x_col, y=y_col, data=dataframe)
-    plt.title(f'{y_col} by {x_col}')
-    plt.xlabel(x_col)
-    plt.ylabel(y_col)
+    if args.action == "general_query":
+        parser.add_argument("query")
 
-    plt.savefig("Loyalty_score_by_region_boxplot.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write(f"![{y_col} by {x_col}](Loyalty_score_by_region_boxplot.png)\n\n")
+    if args.action == "delete_record":
+        parser.add_argument("record_id", type=int)
 
-def plot_correlation_heatmap(dataframe, columns, report_file):
-    """Visualize the correlation matrix between purchase amount, purchase frequency, and loyalty score."""
-    plt.figure(figsize=(8, 6))
-    corr_matrix = dataframe[columns].corr()
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f')
-    plt.title('Correlation Matrix')
+    # Parse again with every argument
+    return parser.parse_args(sys.argv[1:])
 
-    plt.savefig("Correlation_matrix_columns.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write("![Correlation Matrix](Correlation_matrix_columns.png)\n\n")
 
-def plot_scatter_with_trend(dataframe, x_col, y_col, report_file):
-    """Visualize the relationship between annual income and purchase amount with a trend line."""
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=x_col, y=y_col, data=dataframe)
-    sns.regplot(x=x_col, y=y_col, data=dataframe, scatter=False, color='red')
-    plt.title(f'{x_col} vs. {y_col} with Trend Line')
-    plt.xlabel(x_col)
-    plt.ylabel(y_col)
+def main():
+    """Handles all the CLI commands"""
+    args = handle_arguments(sys.argv[1:])
 
-    plt.savefig("scatter_plot_trend_line.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write(f"![{x_col} vs {y_col} with Trend](scatter_plot_trend_line.png)\n\n")
+    if args.action == "extract":
+        print("Extracting data...")
+        extract()
+    elif args.action == "transform_load":
+        print("Transforming data...")
+        load()
+    elif args.action == "update_record":
+        update_record(
+            args.record_id,
+            args.airline,
+            args.avail_seat_km_per_week,
+            args.incidents_85_99,
+            args.fatal_accidents_85_99,
+            args.fatalities_85_99,
+            args.incidents_00_14,
+            args.fatal_accidents_00_14,
+            args.fatalities_00_14,
+        )
+    elif args.action == "delete_record":
+        delete_record(args.record_id)
+    elif args.action == "create_record":
+        create_record(
+            args.airline,
+            args.avail_seat_km_per_week,
+            args.incidents_85_99,
+            args.fatal_accidents_85_99,
+            args.fatalities_85_99,
+            args.incidents_00_14,
+            args.fatal_accidents_00_14,
+            args.fatalities_00_14,
+        )
+    elif args.action == "general_query":
+        general_query(args.query)
+    elif args.action == "read_data":
+        data = read_data()
+        print(data)
+    else:
+        print(f"Unknown action: {args.action}")
 
-def plot_bar_by_category(dataframe, category_col, value_col, report_file):
-    """Compare average purchase amounts by region."""
-    plt.figure(figsize=(10, 6))
-    dataframe.groupby(category_col)[value_col].mean().plot(kind='bar')
-    plt.title(f'Average {value_col} by {category_col}')
-    plt.xlabel(category_col)
-    plt.ylabel(f'Average {value_col}')
 
-    plt.savefig("bar_plot_average_purchase_amt_by_regions.png")
-    with open(report_file, 'a', encoding='utf-8') as file:
-        file.write(f"![Average {value_col} by {category_col}](bar_plot_average_purchase_amt_by_regions.png)\n\n")
-
-# Reading the data
-df = read_csv_file(file_path)
-
-# Writing summary statistics to the summary report file
-summary_statistics(df, output_report)
-
-# Generating plots and saving them in the summary report file
-plot_histograms(df, ['age', 'annual_income', 'purchase_amount', 'purchase_frequency'], output_report)
-plot_scatter_with_hue(df, 'annual_income', 'purchase_amount', 'region', output_report)
-plot_box_by_category(df, 'region', 'loyalty_score', output_report)
-plot_correlation_heatmap(df, ['purchase_amount', 'purchase_frequency', 'loyalty_score'], output_report)
-plot_scatter_with_trend(df, 'annual_income', 'purchase_amount', output_report)
-plot_bar_by_category(df, 'region', 'purchase_amount', output_report)
+if __name__ == "__main__":
+    main()

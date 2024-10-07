@@ -3,15 +3,23 @@
 import sqlite3
 from tabulate import tabulate
 
-# Define a global variable for the log file
+# Define a global variable for the log file and output file
 LOG_FILE = "query_log.md"
-
+OUTPUT_FILE = "query_output.md"
 
 def log_query(query):
     """Adds to a query markdown file"""
     with open(LOG_FILE, "a") as file:
         file.write(f"```sql\n{query}\n```\n\n")
 
+def write_to_output(data, headers):
+    """Writes query results to output.md"""
+    with open(OUTPUT_FILE, "a") as file:
+        if data:
+            file.write(tabulate(data, headers=headers, tablefmt="grid"))
+            file.write("\n\n")  # Add space between different queries
+        else:
+            file.write("No data found.\n\n")  # In case of no data
 
 def general_query(query):
     """Runs a query the user inputs"""
@@ -26,13 +34,12 @@ def general_query(query):
     if query.strip().lower().startswith(("insert", "update", "delete")):
         conn.commit()
 
-    # Close the cursor and connection
-    cursor.close()
-    conn.close()
-
     # Log the query
     log_query(f"{query}")
 
+    # Close the cursor and connection
+    cursor.close()
+    conn.close()
 
 def create_record(airline, avail_seat_km_per_week, incidents_85_99, fatal_accidents_85_99, 
                   fatalities_85_99, incidents_00_14, fatal_accidents_00_14, fatalities_00_14):
@@ -58,7 +65,6 @@ def create_record(airline, avail_seat_km_per_week, incidents_85_99, fatal_accide
             {airline}, {avail_seat_km_per_week}, {incidents_85_99}, {fatal_accidents_85_99}, {fatalities_85_99}, 
             {incidents_00_14}, {fatal_accidents_00_14}, {fatalities_00_14});"""
     )
-
 
 def update_record(record_id, airline, avail_seat_km_per_week, incidents_85_99, fatal_accidents_85_99, 
                   fatalities_85_99, incidents_00_14, fatal_accidents_00_14, fatalities_00_14):
@@ -90,7 +96,6 @@ def update_record(record_id, airline, avail_seat_km_per_week, incidents_85_99, f
         WHERE id={record_id};"""
     )
 
-
 def delete_record(record_id):
     """Delete a record from the AirlineSafetyDB"""
     conn = sqlite3.connect("AirlineSafetyDB.db")
@@ -101,7 +106,6 @@ def delete_record(record_id):
 
     # Log the query
     log_query(f"DELETE FROM AirlineSafety WHERE id={record_id};")
-
 
 def read_data(limit=10):
     """Read the top N rows from the AirlineSafety table"""
@@ -116,15 +120,8 @@ def read_data(limit=10):
     # Log the query
     log_query(f"SELECT * FROM AirlineSafety LIMIT {limit};")
 
-    # Display the data using tabulate
-    if data:
-        print(tabulate(data, headers=col_names, tablefmt="grid"))
-    else:
-        print("No data found.")
-    
+    write_to_output(data, col_names)  # Write results to query_output.md
+
     conn.close()
     return data
-
-
-
 
