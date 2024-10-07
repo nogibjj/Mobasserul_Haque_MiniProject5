@@ -45,7 +45,7 @@ def test_update_record():
             "1",  # Fatalities 85-99
             "0",  # Incidents 00-14
             "1",  # Fatal accidents 00-14
-            "0"   # Fatalities 00-14
+            "0",  # Fatalities 00-14
         ],
         capture_output=True,
         text=True,
@@ -79,7 +79,7 @@ def test_create_record():
             "0",  # Fatalities 85-99
             "1",  # Incidents 00-14
             "0",  # Fatal accidents 00-14
-            "0"   # Fatalities 00-14
+            "0",  # Fatalities 00-14
         ],
         capture_output=True,
         text=True,

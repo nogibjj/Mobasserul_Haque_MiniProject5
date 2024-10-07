@@ -178,3 +178,57 @@ INSERT INTO AirlineSafety VALUES (
             1, 0, 0);
 ```
 
+```sql
+UPDATE AirlineSafety SET 
+            airline=Updated Airline A, avail_seat_km_per_week=600000, 
+            incidents_85_99=3, fatal_accidents_85_99=0, 
+            fatalities_85_99=1, incidents_00_14=0, 
+            fatal_accidents_00_14=1, fatalities_00_14=0 
+        WHERE id=1;
+```
+
+```sql
+DELETE FROM AirlineSafety WHERE id=1;
+```
+
+```sql
+INSERT INTO AirlineSafety VALUES (
+            New Airline, 1000000, 2, 0, 0, 
+            1, 0, 0);
+```
+
+```sql
+SELECT * FROM AirlineSafety WHERE airline = 'Aeroflot*'
+```
+
+```sql
+SELECT * FROM AirlineSafety LIMIT 10;
+```
+
+```sql
+INSERT INTO AirlineSafety VALUES (
+            New Airline, 1000000, 2, 0, 0, 
+            1, 0, 0);
+```
+
+```sql
+SELECT * FROM AirlineSafety LIMIT 10;
+```
+
+```sql
+UPDATE AirlineSafety SET 
+            airline=Updated Airline A, avail_seat_km_per_week=600000, 
+            incidents_85_99=3, fatal_accidents_85_99=0, 
+            fatalities_85_99=1, incidents_00_14=0, 
+            fatal_accidents_00_14=1, fatalities_00_14=0 
+        WHERE id=1;
+```
+
+```sql
+DELETE FROM AirlineSafety WHERE id=1;
+```
+
+```sql
+SELECT * FROM AirlineSafety WHERE airline = 'Aeroflot*'
+```
+
