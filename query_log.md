@@ -172,3 +172,9 @@ SELECT * FROM AirlineSafety WHERE avail_seat_km_per_week > 600000;
 SELECT * FROM AirlineSafety LIMIT 5;
 ```
 
+```sql
+INSERT INTO AirlineSafety VALUES (
+            New Airline, 1000000, 2, 0, 0, 
+            1, 0, 0);
+```
+
