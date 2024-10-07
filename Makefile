@@ -31,4 +31,4 @@ extract:
 	python main.py extract
 
 load: 
-	python main.py load	
+	python main.py transform_load	
